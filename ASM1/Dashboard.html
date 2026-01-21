@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Galaxy Blog</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- VueJS -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: rgba(15, 12, 41, 0.6);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link {
+            color: white !important;
+            position: relative;
+            margin-left: 15px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 0;
+            height: 2px;
+            background: #7f5af0;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding-top: 120px;
+            padding-bottom: 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 25px #7f5af0;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== BLOG CARD ===== */
+        .blog-card {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            height: 100%;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(127, 90, 240, 0.4);
+        }
+
+        .blog-img {
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .blog-body {
+            padding: 20px;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-galaxy {
+            background: linear-gradient(135deg, #7f5af0, #00f5d4);
+            color: white;
+            border-radius: 30px;
+            padding: 8px 20px;
+            border: none;
+            transition: 0.4s;
+            font-size: 14px;
+        }
+
+        .btn-galaxy:hover {
+            box-shadow: 0 0 20px #7f5af0;
+            transform: scale(1.05);
+        }
+
+        /* ===== VUE ANIMATION ===== */
+        .fade-enter-active {
+            transition: all 0.6s ease;
+        }
+
+        .fade-enter-from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand text-white fw-bold">🌌 Galaxy Blog</a>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="./Dashboard.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./login.html">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./register.html">Register</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="container">
+                <h1>Khám phá Galaxy Blog</h1>
+                <p class="text-light fs-5 mt-3">
+                    Nơi chia sẻ bài viết – kiến thức – trải nghiệm vũ trụ
+                </p>
+            </div>
+        </section>
+
+        <!-- BLOG LIST -->
+        <section class="container mb-5">
+            <transition-group name="fade" tag="div" class="row">
+                <div class="col-md-4 mb-4" v-for="blog in blogs" :key="blog.id">
+                    <div class="blog-card">
+                        <img :src="blog.image" class="w-100 blog-img">
+                        <div class="blog-body">
+                            <h5>
+                                <a :href="'post-detail.html?id=' + blog.id" class="text-white text-decoration-none">
+                                    {{ blog.title }}
+                                </a>
+                            </h5>
+
+                            <p class="text-light small">
+                                {{ blog.desc }}
+                            </p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <button class="btn btn-galaxy" @click="like(blog)">
+                                    ❤️ {{ blog.likes }}
+                                </button>
+                                <span class="text-muted small">
+                                    {{ blog.author }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition-group>
+        </section>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Vue App -->
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    blogs: [
+                        {
+                            id: 1,
+                            title: "Vẻ đẹp của Dải Ngân Hà",
+                            desc: "Những hình ảnh ngoạn mục về dải ngân hà trong vũ trụ.",
+                            likes: 12,
+                            author: "Admin",
+                            image: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3"
+                        },
+                        {
+                            id: 2,
+                            title: "Hố đen là gì?",
+                            desc: "Khám phá bí ẩn của hố đen – nơi ánh sáng cũng không thể thoát ra.",
+                            likes: 25,
+                            author: "NASA",
+                            image: "https://images.unsplash.com/photo-1450849608880-6f787542c88a"
+                        },
+                        {
+                            id: 3,
+                            title: "Cuộc sống ngoài Trái Đất",
+                            desc: "Liệu con người có đơn độc trong vũ trụ rộng lớn?",
+                            likes: 18,
+                            author: "Galaxy Team",
+                            image: "https://images.unsplash.com/photo-1476610182048-b716b8518aae"
+                        },
+                        {
+                            id: 4,
+                            title: "Sao Hỏa – Hành tinh đỏ",
+                            desc: "Khám phá hành tinh có khả năng con người sinh sống trong tương lai.",
+                            likes: 30,
+                            author: "SpaceX",
+                            image: "https://images.unsplash.com/photo-1580428180121-69f0cfa8e2f5"
+                        },
+                        {
+                            id: 5,
+                            title: "Du hành không gian",
+                            desc: "Những chuyến du hành vượt ngoài Trái Đất của loài người.",
+                            likes: 22,
+                            author: "ESA",
+                            image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa"
+                        },
+                        {
+                            id: 6,
+                            title: "Vũ trụ song song",
+                            desc: "Giả thuyết về những vũ trụ tồn tại song song với chúng ta.",
+                            likes: 15,
+                            author: "Science Today",
+                            image: "https://images.unsplash.com/photo-1462332420958-a05d1e002413"
+                        }
+                    ]
+                }
+            },
+            methods: {
+                like(blog) {
+                    blog.likes++;
+                }
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+
+</html>
