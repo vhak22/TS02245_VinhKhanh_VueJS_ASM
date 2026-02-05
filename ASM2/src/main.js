@@ -5,7 +5,7 @@ import router from './router'
 //import css and js for bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-//import custom css
+//import custom csss
 import './style.css'
 
 const app = createApp(App)
